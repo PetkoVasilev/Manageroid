@@ -1,10 +1,11 @@
 package com.manageroid.application.views;
 
-import com.manageroid.application.R;
-import com.manageroid.application.R.layout;
-
 import android.app.Activity;
 import android.os.Bundle;
+import android.view.View;
+import android.widget.Toast;
+
+import com.manageroid.application.R;
 
 public class SplashScreenActivity extends Activity {
     /** Called when the activity is first created. */
@@ -12,5 +13,10 @@ public class SplashScreenActivity extends Activity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main);
+    }
+    
+    public void invokeButton(View view)
+    {
+    	Toast.makeText(this, "it is working", Toast.LENGTH_LONG).show();
     }
 }

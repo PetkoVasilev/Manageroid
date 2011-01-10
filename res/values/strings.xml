@@ -2,4 +2,7 @@
 <resources>
     <string name="hello">Hello World, SplashScreenActivity!</string>
     <string name="app_name">Manageroid</string>
+    <string name="service_created">Service onCreate invoked</string>
+     <string name="service_started">Service onStart invoked</string>
+      <string name="service_destroyed">Service destroyed</string>
 </resources>

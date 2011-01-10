@@ -18,8 +18,29 @@
 			</intent-filter>
 		</activity>
 
+		<receiver
+			android:name=".receivers.StartupReceiver">
+			<intent-filter>
+				<action
+					android:name="android.intent.action.BOOT_COMPLETED" />
+				<category
+					android:name="android.intent.category.HOME" />
+			</intent-filter>
+		</receiver>
+
+		<service
+			android:name=".services.ManageroidService">
+			<intent-filter>
+				<action
+					android:name="com.manageroid.application.services.ManageroidService" />
+			</intent-filter>
+		</service>
+
 	</application>
+
 	<uses-sdk
 		android:minSdkVersion="9" />
 
+	<uses-permission
+		android:name="android.permission.RECEIVE_BOOT_COMPLETED"></uses-permission>
 </manifest> 
