@@ -1,8 +1,27 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="hello">Hello World, SplashScreenActivity!</string>
-    <string name="app_name">Manageroid</string>
-    <string name="service_created">Service onCreate invoked</string>
-     <string name="service_started">Service onStart invoked</string>
-      <string name="service_destroyed">Service destroyed</string>
+	<string
+		name="hello">Hello World, SplashScreenActivity!</string>
+	<string
+		name="app_name">Manageroid</string>
+	<string
+		name="service_created">Service onCreate invoked</string>
+	<string
+		name="service_started">Service onStart invoked</string>
+	<string
+		name="service_destroyed">Service destroyed</string>
+	<string
+		name="task_list">List of tasks</string>
+	<string
+		name="create_new">Add new task</string>
+	<string
+		name="delete_task">Delete this task</string>
+	<string
+		name="modify">Modify this task</string>
+	<string
+		name="prerequisits">Prerequisits</string>
+	<string
+		name="waht_to_do">What to do</string>
+	<string
+		name="revertable">Revertable</string>
 </resources>

@@ -1,18 +1,47 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout
 	xmlns:android="http://schemas.android.com/apk/res/android"
+	android:id="@+id/splash"
 	android:orientation="vertical"
 	android:layout_width="fill_parent"
-	android:layout_height="fill_parent">
+	android:layout_height="fill_parent"
+	android:layout_gravity="center_horizontal">
+
 	<TextView
 		android:layout_width="fill_parent"
 		android:layout_height="wrap_content"
-		android:text="@string/hello" />
-	<Button
+		android:text="@string/task_list" />
+
+	<ListView
+		android:id="@+id/tasks"
 		android:layout_width="fill_parent"
 		android:layout_height="wrap_content"
-		android:text="@string/hello"
-		android:onClick="invokeButton" />
-		
+		android:choiceMode="singleChoice"/>
+
+	<Button
+		android:id="@+id/newbutton"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:text="@string/create_new"
+		android:onClick="createNewTask" />
+
+	<Button
+		android:id="@+id/modifybutton"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:text="@string/modify"
+		android:onClick="modification"
+		android:visibility="gone" />
+
+	<Button
+		android:id="@+id/deletebutton"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:text="@string/delete_task"
+		android:onClick="deleteOldTask"
+		android:visibility="gone" />
 
 </LinearLayout>
+
+
+
