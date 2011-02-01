@@ -2,12 +2,6 @@ package com.manageroid.application.facade;
 
 import org.puremvc.java.multicore.patterns.facade.Facade;
 
-import android.app.Activity;
-
-import com.manageroid.application.command.NotificationNames;
-import com.manageroid.application.command.PrepareMainMenu;
-import com.manageroid.application.command.RefreshTasksCommand;
-
 /**
  * Concrete <code>Facade</code> for this application.
  * @author Administrator
@@ -47,19 +41,9 @@ public class ManageroidFacade extends Facade {
 	protected void initializeController() {
 		super.initializeController();
 
-		registerCommand(NotificationNames.STARTUP_MAINMENU, new PrepareMainMenu());
-		registerCommand(NotificationNames.REFRESH_MAINMENU, new RefreshTasksCommand());
-	}
-	
-	/**
-	 * Start the <code>Activity</code> initialization sequence.
-	 * 
-	 * @param activity
-	 * 		A reference to the <code>Activity</code> to initialize.
-	 */
-	public void startup( Activity activity )
-	{
-		sendNotification(  NotificationNames.STARTUP_MAINMENU, activity  );
+		//registerCommand(NotificationNames.STARTUP_MAINMENU, new PrepareMainMenu());
+		//registerCommand(NotificationNames.REFRESH_MAINMENU, new RefreshTasksCommand());
+		//registerCommand(NotificationNames.CREATE_NEW_TASK, new CreateNewTaskCommand());
 	}
 
 }

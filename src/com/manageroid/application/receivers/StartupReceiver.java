@@ -15,6 +15,7 @@ public class StartupReceiver extends BroadcastReceiver {
 	public void onReceive(Context context, Intent arg1) {
 		// TODO Auto-generated method stub
 		
+		//I suppose that there is some bugs here
 		Intent serviceIntent = new Intent();
 		serviceIntent.setAction("com.manageroid.application.services.ManageroidService");
 		context.startService(serviceIntent);

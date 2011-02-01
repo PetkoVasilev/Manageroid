@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout
 	xmlns:android="http://schemas.android.com/apk/res/android"
-	android:id="@+id/splash"
+	android:id="@+id/main"
 	android:orientation="vertical"
 	android:layout_width="fill_parent"
 	android:layout_height="fill_parent"
@@ -30,16 +30,14 @@
 		android:layout_width="wrap_content"
 		android:layout_height="wrap_content"
 		android:text="@string/modify"
-		android:onClick="modification"
-		android:visibility="gone" />
+		android:onClick="modification"/>
 
 	<Button
 		android:id="@+id/deletebutton"
 		android:layout_width="wrap_content"
 		android:layout_height="wrap_content"
 		android:text="@string/delete_task"
-		android:onClick="deleteOldTask"
-		android:visibility="gone" />
+		android:onClick="deleteOldTask" />
 
 </LinearLayout>
 
