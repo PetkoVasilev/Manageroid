@@ -21,7 +21,7 @@ public class ManageroidFacade extends Facade {
 	private ManageroidFacade(String multitonKey1) {
 		super(multitonKey1);
 	}
-	
+
 	/**
 	 * <code>ApplicationFacade</code> singleton fabrication method
 	 * implementation.
