@@ -68,9 +68,8 @@ public class MainActivity extends Activity {
 		tasks.setAdapter(teskListAdapter);
 
 		tasks.setOnItemClickListener(new OnItemClickListener() {
-			@Override
-			public void onItemClick(AdapterView<?> arg0, View arg1, int arg2,
-					long arg3) {
+//			@Override
+			public void onItemClick(AdapterView<?> arg0, View arg1, int arg2, long arg3) {
 				// something
 			}
 		});
