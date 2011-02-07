@@ -4,6 +4,7 @@ import java.util.ArrayList;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
@@ -14,6 +15,7 @@ import android.widget.ListView;
 import android.widget.Toast;
 
 import com.manageroid.application.R;
+import com.manageroid.application.proxy.Database;
 
 /**
  * The {@link Activity} responsible main menu of the application
@@ -45,11 +47,13 @@ public class MainActivity extends Activity {
 	 * The list of tasks TODO: this is not supposed to be a String, it must be
 	 * {@link ManagedTask}
 	 */
-	private ArrayList<String> list = new ArrayList<String>() {{
-		add("XZ13s");
-		add("AB21/X");
-		add("YYLEX");
-	 }};
+	private ArrayList<String> list = new ArrayList<String>() {
+		{
+			add("XZ13s");
+			add("AB21/X");
+			add("YYLEX");
+		}
+	};
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -57,6 +61,10 @@ public class MainActivity extends Activity {
 		super.onCreate(savedInstanceState);
 
 		setContentView(R.layout.main);
+
+		SQLiteDatabase db = Database.getInstance().databaseSerializer
+				.getWritableDatabase();
+		db.close();
 
 		tasks = (ListView) findViewById(R.id.tasks);
 		setModify((Button) findViewById(R.id.modifybutton));
@@ -68,8 +76,9 @@ public class MainActivity extends Activity {
 		tasks.setAdapter(teskListAdapter);
 
 		tasks.setOnItemClickListener(new OnItemClickListener() {
-//			@Override
-			public void onItemClick(AdapterView<?> arg0, View arg1, int arg2, long arg3) {
+			@Override
+			public void onItemClick(AdapterView<?> arg0, View arg1, int arg2,
+					long arg3) {
 				// something
 			}
 		});
@@ -138,7 +147,7 @@ public class MainActivity extends Activity {
 	public Button getModify() {
 		return modify;
 	}
-	
+
 	public ListView getTasks() {
 		return tasks;
 	}

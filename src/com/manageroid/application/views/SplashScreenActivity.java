@@ -34,7 +34,7 @@ public class SplashScreenActivity extends Activity implements OnClickListener {
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.splash);
-
+		
 		setLogo((ImageView) findViewById(R.id.logo));
 	}
 
@@ -55,7 +55,7 @@ public class SplashScreenActivity extends Activity implements OnClickListener {
 		handler.removeCallbacks(startMainActivity);
 	}
 
-//	@Override
+	@Override
 	public void onClick(View v) {
 		handler.removeCallbacks(fadeInAnimation);
 		handler.removeCallbacks(startMainActivity);
@@ -70,7 +70,7 @@ public class SplashScreenActivity extends Activity implements OnClickListener {
 	 */
 	private Runnable fadeInAnimation = new Runnable() {
 
-//		@Override
+		@Override
 		public void run() {
 			Animation fadeIn = new AlphaAnimation(0.0f, 1.0f);
 			fadeIn.setDuration(1500);
@@ -86,7 +86,7 @@ public class SplashScreenActivity extends Activity implements OnClickListener {
 	 */
 	private Runnable startMainActivity = new Runnable() {
 
-//		@Override
+		@Override
 		public void run() {
 			// TODO Auto-generated method stub
 			// new intent(main activity)
