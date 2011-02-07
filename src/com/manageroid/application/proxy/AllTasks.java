@@ -38,7 +38,8 @@ public class AllTasks {
 	private List<ManageroidTask> allMyTasks;
 
 	private AllTasks() {
-		DatabaseSerializer dbs = new DatabaseSerializer(
+		load(ManageroidApp.getContext());
+		/*DatabaseSerializer dbs = new DatabaseSerializer(
 				ManageroidApp.getContext());
 		SQLiteDatabase db = dbs.getReadableDatabase();
 
@@ -47,7 +48,7 @@ public class AllTasks {
 		
 		// TODO: populate the tasks from the SQLite
 		// @author:Kiril @date:08/02/11
-		setAllMyTasks(new ArrayList<ManageroidTask>());
+		setAllMyTasks(new ArrayList<ManageroidTask>());*/
 	}
 
 	public static AllTasks getInstance() {
