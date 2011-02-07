@@ -1,5 +1,6 @@
 package com.manageroid.application.proxy;
 
+import android.content.Context;
 import java.io.ByteArrayInputStream;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
@@ -10,35 +11,27 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
 import com.manageroid.application.ManageroidApp;
 
+/**
+ * Singleton class containing all tasks of the manager
+ * @author Administrator
+ *
+ */
 public class AllTasks {
-	
+
 	private final static String FILE_NAME = "manageroid_tasks.bin";
-	
-	public void archive(Context context)
-	{
-		// not tested
-		try
-		{
-			FileOutputStream fos = context.openFileOutput(FILE_NAME, 0);
-			ObjectOutputStream oos = new ObjectOutputStream(fos);
-			oos.writeObject(allMyTasks);
-			fos.close();
-		}
-		catch (IOException fnfe) {}
-	}
 	
 	private static AllTasks instance;
 
 	private List<ManageroidTask> allMyTasks;
 
 	private AllTasks() {
-		DatabaseSerializer dbs = new DatabaseSerializer(
+		load(ManageroidApp.getContext());
+		/*DatabaseSerializer dbs = new DatabaseSerializer(
 				ManageroidApp.getContext());
 		SQLiteDatabase db = dbs.getReadableDatabase();
 
@@ -48,6 +41,7 @@ public class AllTasks {
 		// TODO: populate the tasks from the SQLite
 		// @author:Kiril @date:08/02/11
 		setAllMyTasks(new ArrayList<ManageroidTask>());
+		*/
 	}
 
 	public static AllTasks getInstance() {
@@ -61,9 +55,11 @@ public class AllTasks {
 	}
 
 	public List<ManageroidTask> getAllMyTasks() {
-		return Collections.unmodifiableList(allMyTasks);
+		//TODO: this leaks
+		//return Collcetions.unmodifiableList(allMyTasks);
+		return allMyTasks;
 	}
-
+	
 	public void load(Context context)
 	{
 		try
@@ -85,8 +81,20 @@ public class AllTasks {
 		}
 		catch (IOException ioe) {}
 	}
+	
+	public void archive(Context context)
+	{
+		// not tested
+		try
+		{
+			FileOutputStream fos = context.openFileOutput(FILE_NAME, 0);
+			ObjectOutputStream oos = new ObjectOutputStream(fos);
+			oos.writeObject(allMyTasks);
+			fos.close();
+		}
+		catch (IOException fnfe) {}
+	}
 }
-
 
 
 
