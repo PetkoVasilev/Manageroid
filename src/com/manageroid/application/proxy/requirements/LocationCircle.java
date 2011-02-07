@@ -3,7 +3,10 @@ package com.manageroid.application.proxy.requirements;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import android.location.Location;
+
 import com.manageroid.application.proxy.ManageroidTask;
+import com.manageroid.application.services.ManageroidService;
 
 /**
  * Class that contains location requirements for a {@link ManageroidTask}
@@ -17,15 +20,20 @@ public class LocationCircle implements Accomplishable {
 	private static final String latitude = "y";
 	private static final String radiusStr = "radius";
 
-	private long x;
-	private long y;
-	private long radius;
+	private double x;
+	private double y;
+	private double radius;
 
 	@Override
-	public boolean requirementsAreMet() {
-		// TODO: add implementation
-		// @author:Kiril @date:07/06/11
-		return false;
+	public boolean requirementsAreMet()
+	{
+		if (ManageroidService.currentLocation == null) return false;
+
+		Location currentLocation = ManageroidService.currentLocation;
+		float distance[] = new float[1];
+		Location.distanceBetween(y, x, currentLocation.getLatitude(), currentLocation.getLongitude(), distance);
+
+		return distance[0] < radius;
 	}
 
 	@Override

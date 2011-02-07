@@ -7,6 +7,7 @@ public class DebugLog
 	static public void write(String debugOutput)
 	{
 		// LogCat filter "info"
+		// we can remove this class later
         Log.i ("info", debugOutput);
 	}
 }
