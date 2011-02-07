@@ -26,10 +26,14 @@ public class DatabaseSerializer extends SQLiteOpenHelper {
 		super.onOpen(db);
 	}
 
+	public static final String table1 = "tasks";
+
 	@Override
 	public void onCreate(SQLiteDatabase db) {
 
-		db.execSQL("CREATE TABLE tasks(task_id INTEGER PRIMARY KEY, requirement_id INTEGER, executable_id INTEGER );");
+		db.execSQL("CREATE TABLE "
+				+ table1
+				+ "(task_id INTEGER PRIMARY KEY, requirement_id INTEGER, executable_id INTEGER );");
 		db.execSQL("CREATE TABLE reqs(req_id INTEGER PRIMARY KEY, req_json STRING);");
 		db.execSQL("CREATE TABLE execs(exec_id INTEGER PRIMARY KEY, exec_json STRING);");
 

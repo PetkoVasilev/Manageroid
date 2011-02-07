@@ -4,8 +4,10 @@ import java.util.ArrayList;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
@@ -14,8 +16,11 @@ import android.widget.Button;
 import android.widget.ListView;
 import android.widget.Toast;
 
+import com.manageroid.application.ManageroidApp;
 import com.manageroid.application.R;
+import com.manageroid.application.proxy.AllTasks;
 import com.manageroid.application.proxy.Database;
+import com.manageroid.application.services.ManageroidService;
 
 /**
  * The {@link Activity} responsible main menu of the application
@@ -36,6 +41,11 @@ public class MainActivity extends Activity {
 	 * The <code>ListView</code> of {@link ManagedTask}s
 	 */
 	private ListView tasks;
+
+	/**
+	 * The button showing if the {@link ManageroidService} is active or not
+	 */
+	private Button active;
 
 	/**
 	 * The adapter connecting the {@link ArrayList} of {@link ManagedTask}s
@@ -67,6 +77,17 @@ public class MainActivity extends Activity {
 		db.close();
 
 		tasks = (ListView) findViewById(R.id.tasks);
+		active = (Button) findViewById(R.id.active);
+		
+		SharedPreferences prefs = PreferenceManager
+				.getDefaultSharedPreferences(ManageroidApp.getContext());
+		boolean bStartService = prefs.getBoolean("startService", false);
+		
+		if(bStartService)
+			active.setText(R.string.active);
+		else 
+			active.setText(R.string.inactive);
+			
 		setModify((Button) findViewById(R.id.modifybutton));
 		setDelete((Button) findViewById(R.id.deletebutton));
 
@@ -120,6 +141,39 @@ public class MainActivity extends Activity {
 	 */
 	public void modification(View view) {
 		// open taskActivity - then modify existing task
+	}
+
+	/**
+	 * Invoker when active/inactive button is pressed
+	 * @param view
+	 * 		The {@link Button} for setting active/inactive
+	 */
+	public void toggleActive(View view) {
+		AllTasks.getInstance().getAllMyTasks();
+		
+		if (active.getText() == getString(R.string.active)) {
+			active.setText(R.string.inactive);
+
+			SharedPreferences prefs = PreferenceManager
+					.getDefaultSharedPreferences(this);
+			SharedPreferences.Editor sharedPreferencesEditor = prefs.edit();
+			sharedPreferencesEditor.putBoolean("startService", false);
+			sharedPreferencesEditor.commit();
+
+			// STOP the fucking service
+		} else {
+			active.setText(R.string.active);
+
+			SharedPreferences prefs = PreferenceManager
+					.getDefaultSharedPreferences(this);
+			SharedPreferences.Editor sharedPreferencesEditor = prefs.edit();
+			sharedPreferencesEditor.putBoolean("startService", true);
+			sharedPreferencesEditor.commit();
+
+			Intent serviceIntent = new Intent();
+			serviceIntent
+					.setAction("com.manageroid.application.services.ManageroidService");
+		}
 	}
 
 	/**

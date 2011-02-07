@@ -6,6 +6,7 @@ import org.json.JSONObject;
 import android.location.Location;
 
 import com.manageroid.application.proxy.ManageroidTask;
+import com.manageroid.application.proxy.executables.Readable;
 import com.manageroid.application.services.ManageroidService;
 
 /**
@@ -14,7 +15,7 @@ import com.manageroid.application.services.ManageroidService;
  * @author Administrator
  * @see Accomplishable
  */
-public class LocationCircle implements Accomplishable {
+public class LocationCircle implements Accomplishable, Readable {
 
 	private static final String longtigude = "x";
 	private static final String latitude = "y";
@@ -53,9 +54,9 @@ public class LocationCircle implements Accomplishable {
 	@Override
 	public void reconstructObject(JSONObject json) {
 		try {
-			x = json.getLong(longtigude);
-			y = json.getLong(latitude);
-			radius = json.getLong(radiusStr);
+			x = json.getDouble(longtigude);
+			y = json.getDouble(latitude);
+			radius = json.getDouble(radiusStr);
 		} catch (JSONException e) {
 			// TODO:Logger something
 			// @author:Kiril @date:06/02/11

@@ -9,6 +9,7 @@ import org.json.JSONObject;
 import android.text.format.Time;
 
 import com.manageroid.application.proxy.ManageroidTask;
+import com.manageroid.application.proxy.executables.Readable;
 import com.manageroid.application.services.ManageroidService;
 
 /**
@@ -17,7 +18,7 @@ import com.manageroid.application.services.ManageroidService;
  *
  *@see Accomplishable
  */
-public class TimeInterval implements Accomplishable {
+public class TimeInterval implements Accomplishable, Readable {
 	private static final String startStr = "start";
 	private static final String endStr = "start";
 
@@ -37,10 +38,7 @@ public class TimeInterval implements Accomplishable {
 		{
 			return currentTimeString.compareTo(startTimeString) >= 0 && currentTimeString.compareTo(endTimeString) <= 0;
 		}
-		else
-		{
-			return currentTimeString.compareTo(startTimeString) >= 0 || currentTimeString.compareTo(endTimeString) <= 0;
-		}
+		return currentTimeString.compareTo(startTimeString) >= 0 || currentTimeString.compareTo(endTimeString) <= 0;
 	}
 
 	@Override

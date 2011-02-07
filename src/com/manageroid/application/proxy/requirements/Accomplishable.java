@@ -16,18 +16,4 @@ public interface Accomplishable {
 	 */
 	public boolean requirementsAreMet();
 	
-	/**
-	 * @return
-	 * 		JSON representation of the <code>Accomplishable</code> object
-	 */
-	public JSONObject getJSON();
-	
-	/**
-	 * Reconstructs the <code>Accomplishable</code> by given {@link JSONObject}
-	 * @param json
-	 * 		String containing the information for reconstruction of the class
-	 * @return
-	 * 		Accomplishable instance, for the concrete class
-	 */
-	public void reconstructObject(JSONObject json);
 }

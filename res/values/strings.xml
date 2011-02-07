@@ -24,4 +24,8 @@
 		name="waht_to_do">What to do</string>
 	<string
 		name="revertable">Revertable</string>
+	<string
+		name="active">Manageroid Active</string>
+	<string
+		name="inactive">Manageroid Inactive</string>
 </resources>
