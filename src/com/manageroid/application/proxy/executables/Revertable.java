@@ -8,7 +8,7 @@ package com.manageroid.application.proxy.executables;
 public interface Revertable {
 
 	/**
-	 * Purpose - to revert some changes made to something by coresponding
+	 * Purpose - to revert some changes made to something by corresponding
 	 * {@link Executable} class
 	 */
 	public void undo();

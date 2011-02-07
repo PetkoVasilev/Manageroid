@@ -62,12 +62,16 @@ public class ManageroidService extends Service {
     	LocationManager mlocManager = (LocationManager)getSystemService(Context.LOCATION_SERVICE);
     	final ManageroidGPSLocationListener mlocListener = new ManageroidGPSLocationListener();
         mlocManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, mlocListener);
+        
+        // read once on service start
+        AllTasks.load(getApplicationContext());
 
         timer.scheduleAtFixedRate(
               new TimerTask()
               {
                     public void run()
                     {
+                    	boolean mustWriteTasks = false;
                     	currentTime.setToNow();
 
                     	DebugLog.write("in timer");
@@ -79,46 +83,59 @@ public class ManageroidService extends Service {
 	                		DebugLog.write(currentLat + " " + currentLong);
     					}
 
-            			for (ManageroidTask rule : AllTasks.allMyTasks)
+    					for (int i = AllTasks.allMyTasks.size() - 1; i >= 0;--i)
             			{
-            				if(currentTime.after(rule.expirationDate))
+    						ManageroidTask currentTask =  AllTasks.allMyTasks.get(i);
+            				if(currentTime.after(currentTask.expirationDate))
             				{
-    							if (rule.isActive && rule.isRevertable())
+    							if (currentTask.isActive && currentTask.isRevertable())
     							{
-    								rule.whatToRevert.undo();
+    								currentTask.whatToRevert.undo();
     							}
-            					// delete rule
+        						AllTasks.allMyTasks.remove(i);
+        						mustWriteTasks = true;
             					continue;
             				}
 
-            				// if !hasLocationComponent, then "locationRuleSatisfied = true"
-            				
-            				if (rule.requirementsAreMet() && !rule.isActive)
+            				if (currentTask.requirementsAreMet() && !currentTask.isActive)
             				{
-	            					rule.whatToDo.exec();
-	            					rule.isActive = true;
-	            					--rule.repeat;
-	            					if(rule.repeat < 0)
-	            					{
-	            						// delete rule
-	            					}
-            				}
-            				else if (!rule.requirementsAreMet() && rule.isActive)
-            				{
-            					if (rule.isRevertable())
+            					currentTask.whatToDo.exec();
+            					currentTask.isActive = true;
+	            				--currentTask.repeat;
+
+	            				if(currentTask.repeat < 0)
             					{
-            						rule.whatToRevert.undo();
+            						AllTasks.allMyTasks.remove(i);
             					}
-            					rule.isActive = false;
+            					else
+            					{
+            						AllTasks.allMyTasks.set(i, currentTask);
+            					}
+	            				mustWriteTasks = true;
+            				}
+            				else if (!currentTask.requirementsAreMet() && currentTask.isActive)
+            				{
+            					if (currentTask.isRevertable())
+            					{
+            						currentTask.whatToRevert.undo();
+            					}
+            					currentTask.isActive = false;
+        						AllTasks.allMyTasks.set(i, currentTask);
+        						mustWriteTasks = true;
             				}
             			}
+
+    			        // write on every change
+    					if (mustWriteTasks)
+    					{
+    						AllTasks.archive(getApplicationContext());
+    					}
                     }
               }, DELAY_INTERVAL, UPDATE_INTERVAL);
     }
 
     @Override
 	public void onDestroy() {
-		// TODO Auto-generated method stub
 		super.onDestroy();
 	    _shutdownService();
 	}

@@ -15,7 +15,7 @@ import com.manageroid.application.services.ManageroidService;
  * Class containing time interval requirement for {@link ManageroidTask}
  * @author Administrator
  *
- *@see Accomplishable
+ * @see Accomplishable
  */
 public class TimeInterval implements Accomplishable {
 	private static final String startStr = "start";

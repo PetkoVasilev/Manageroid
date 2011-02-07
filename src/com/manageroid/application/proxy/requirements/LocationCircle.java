@@ -53,9 +53,9 @@ public class LocationCircle implements Accomplishable {
 	@Override
 	public void reconstructObject(JSONObject json) {
 		try {
-			x = json.getLong(longtigude);
-			y = json.getLong(latitude);
-			radius = json.getLong(radiusStr);
+			x = json.getDouble(longtigude);
+			y = json.getDouble(latitude);
+			radius = json.getDouble(radiusStr);
 		} catch (JSONException e) {
 			// TODO:Logger something
 			// @author:Kiril @date:06/02/11
