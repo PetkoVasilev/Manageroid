@@ -5,13 +5,19 @@ import java.util.Date;
 
 import com.manageroid.application.proxy.executables.Executable;
 import com.manageroid.application.proxy.executables.Revertable;
+import com.manageroid.application.proxy.requirements.Accomplishable;
 import com.manageroid.application.proxy.requirements.LocationCircle;
 import com.manageroid.application.proxy.requirements.TimeInterval;
 
+/**
+ * Base class for a given task - contains requirements and executables
+ * @author Administrator
+ *
+ *@see Accomplishable
+ *@see Executable
+ */
 public class ManageroidTask implements Serializable {
-	/**
-     * 
-     */
+
     private static final long serialVersionUID = 879082348790L;
 	public TimeInterval timeRule = null;
 	public LocationCircle locationRule = null;

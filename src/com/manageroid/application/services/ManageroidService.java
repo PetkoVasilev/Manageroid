@@ -3,6 +3,11 @@
  */
 package com.manageroid.application.services;
 
+import java.util.Date;
+import java.util.List;
+import java.util.Timer;
+import java.util.TimerTask;
+
 import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
@@ -11,11 +16,6 @@ import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
 import android.os.IBinder;
-
-import java.util.Date;
-import java.util.List;
-import java.util.Timer;
-import java.util.TimerTask;
 
 import com.manageroid.application.proxy.AllTasks;
 import com.manageroid.application.proxy.ManageroidTask;
@@ -29,6 +29,24 @@ public class ManageroidService extends Service {
 //	private final static long UPDATE_INTERVAL = 60 * 5 * 1000; // 5 minutes
 	private final static long UPDATE_INTERVAL = 10 * 1000; // seconds
 	private final static long DELAY_INTERVAL = 0;
+	
+	private AllTasks tasks = null;
+
+	/**
+	 * @return
+	 * 		{@link AllTasks} object containing all tasks in the manager
+	 */
+	public AllTasks getTasks() {
+		return tasks;
+	}
+
+	/**
+	 * @param value
+	 * 		{@link AllTasks} object
+	 */
+	public void setTasks(AllTasks value) {
+		this.tasks = value;
+	}
 
 	private Timer timer = new Timer();
 
@@ -46,6 +64,7 @@ public class ManageroidService extends Service {
 		// TODO Auto-generated method stub
 		super.onCreate();
 		DebugLog.write("service onCreate");
+		tasks = AllTasks.getInstance();
 	}
 
 	@Override
@@ -64,7 +83,7 @@ public class ManageroidService extends Service {
 		mlocManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, mlocListener);
         
         // read once on service start
-        AllTasks.load(getApplicationContext());
+		tasks.load(getApplicationContext());
 
 		timer.scheduleAtFixedRate(new TimerTask() {
 			@Override
@@ -80,9 +99,9 @@ public class ManageroidService extends Service {
 					DebugLog.write(currentLat + " " + currentLong);
 				}
 				
-				if (!AllTasks.isEmpty())
+				if (!tasks.isEmpty())
 				{
-					List<ManageroidTask> taskList = AllTasks.getAllMyTasks();
+					List<ManageroidTask> taskList = tasks.getAllMyTasks();
 					for (int i = taskList.size() - 1; i >= 0;--i)
 	    			{
 						ManageroidTask currentTask =  taskList.get(i);
@@ -92,7 +111,7 @@ public class ManageroidService extends Service {
 							{
 								currentTask.revert();
 							}
-							AllTasks.remove(i);
+							tasks.remove(i);
 							mustWriteTasks = true;
 	    					continue;
 	    				}
@@ -105,11 +124,11 @@ public class ManageroidService extends Service {
 	
 	        				if(currentTask.repeat < 0 && !currentTask.isRevertable())
 	    					{
-	    						AllTasks.remove(i);
+	        					tasks.remove(i);
 	    					}
 	    					else
 	    					{
-	    						AllTasks.set(i, currentTask);
+	    						tasks.set(i, currentTask);
 	    					}
 	        				mustWriteTasks = true;
 	    				}
@@ -123,11 +142,11 @@ public class ManageroidService extends Service {
 
 	        				if(currentTask.repeat < 0)
 	    					{
-	    						AllTasks.remove(i);
+	        					tasks.remove(i);
 	    					}
 	    					else
 	    					{
-	    						AllTasks.set(i, currentTask);
+	    						tasks.set(i, currentTask);
 	    					}
 
 	        				mustWriteTasks = true;
@@ -138,8 +157,8 @@ public class ManageroidService extends Service {
 		        // write if anything has changed
 				if (mustWriteTasks)
 				{
-					DebugLog.write("archive " + AllTasks.size());
-					AllTasks.archive(getApplicationContext());
+					DebugLog.write("archive " + tasks.size());
+					tasks.archive(getApplicationContext());
 				}
 			}
 		}, DELAY_INTERVAL, UPDATE_INTERVAL);

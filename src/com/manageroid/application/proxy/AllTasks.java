@@ -10,19 +10,30 @@ import java.util.Collections;
 import java.util.List;
 
 import android.content.Context;
+import android.widget.BaseAdapter;
 
 import com.manageroid.application.ManageroidApp;
 import com.manageroid.application.services.DebugLog;
+import com.manageroid.application.views.adapters.TaskAdapter;
 
+/**
+ * Actually this class is a wrapper of ArrayList<ManageroidTask>
+ * @author Administrator
+ *
+ */
 public class AllTasks {
 	
 	private final static String FILE_NAME = "manageroid_tasks.bin";
 
-	private static ArrayList<ManageroidTask> allMyTasks = new ArrayList<ManageroidTask>();
+	private ArrayList<ManageroidTask> allMyTasks = new ArrayList<ManageroidTask>();
 	
 	private static AllTasks instance;
+	
+	private BaseAdapter teskListAdapter;
+	
+	private Context context;
 
-	public static void archive(Context context)
+	public void archive(Context context)
 	{
 		try
 		{
@@ -39,6 +50,9 @@ public class AllTasks {
 
 	private AllTasks() {
 		load(ManageroidApp.getContext());
+		
+		
+		
 		/*DatabaseSerializer dbs = new DatabaseSerializer(
 				ManageroidApp.getContext());
 		SQLiteDatabase db = dbs.getReadableDatabase();
@@ -51,6 +65,13 @@ public class AllTasks {
 		setAllMyTasks(new ArrayList<ManageroidTask>());*/
 	}
 
+	public void initAdapter(Context context)
+	{
+		//XXX:possible bug, this context looks suspicious
+		//@author: Kiril @date:09/02/11
+		teskListAdapter = new TaskAdapter(context, allMyTasks);
+	}
+	
 	public static AllTasks getInstance()
 	{
 		if (instance == null)
@@ -62,11 +83,11 @@ public class AllTasks {
 		allMyTasks = value;
 	}
 
-	public static List<ManageroidTask> getAllMyTasks() {
+	public List<ManageroidTask> getAllMyTasks() {
 		return Collections.unmodifiableList(allMyTasks);
 	}
 
-	public static void load(Context context)
+	public void load(Context context)
 	{
 		DebugLog.write("in AllTasks.load() start");
 		try
@@ -92,37 +113,45 @@ public class AllTasks {
 			allMyTasks = new ArrayList<ManageroidTask>();
 	}
 	
-	public static void add(ManageroidTask newTask)
+	public void add(ManageroidTask newTask)
 	{
 		allMyTasks.add(newTask);
+		teskListAdapter.notifyDataSetChanged();
 	}
 	
-	public static void remove(int i)
+	public void remove(int i)
 	{
 		DebugLog.write("remove " + i);
 		allMyTasks.remove(i);
+		teskListAdapter.notifyDataSetChanged();
 	}
 
-	public static void set(int i,  ManageroidTask newTask)
+	public void set(int i,  ManageroidTask newTask)
 	{
 		allMyTasks.set(i, newTask);
+		teskListAdapter.notifyDataSetChanged();
 	}
 	
-	public static boolean isEmpty()
+	public boolean isEmpty()
 	{
 		return allMyTasks == null;
 	}
 	
-	public static int size()
+	public int size()
 	{
 		if (allMyTasks != null)
 		{
 			return allMyTasks.size();
 		}
-		else
-		{
-			return 0;
-		}
+		return 0;
+	}
+
+	public void setTeskListAdapter(BaseAdapter teskListAdapter) {
+		this.teskListAdapter = teskListAdapter;
+	}
+
+	public BaseAdapter getTeskListAdapter() {
+		return teskListAdapter;
 	}
 }
 

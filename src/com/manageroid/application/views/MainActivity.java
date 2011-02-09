@@ -12,6 +12,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ArrayAdapter;
+import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.Toast;
@@ -22,6 +23,7 @@ import com.manageroid.application.proxy.AllTasks;
 import com.manageroid.application.proxy.Database;
 import com.manageroid.application.services.DebugLog;
 import com.manageroid.application.services.ManageroidService;
+import com.manageroid.application.views.adapters.TaskAdapter;
 
 /**
  * The {@link Activity} responsible main menu of the application
@@ -52,19 +54,7 @@ public class MainActivity extends Activity {
 	 * The adapter connecting the {@link ArrayList} of {@link ManagedTask}s
 	 * objects with the {@link ListView} of this <code>Activity</code>
 	 */
-	private ArrayAdapter<String> teskListAdapter;
-
-	/**
-	 * The list of tasks TODO: this is not supposed to be a String, it must be
-	 * {@link ManagedTask}
-	 */
-	private ArrayList<String> list = new ArrayList<String>() {
-		{
-			add("XZ13s");
-			add("AB21/X");
-			add("YYLEX");
-		}
-	};
+	private BaseAdapter teskListAdapter;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -92,10 +82,10 @@ public class MainActivity extends Activity {
 		setModify((Button) findViewById(R.id.modifybutton));
 		setDelete((Button) findViewById(R.id.deletebutton));
 
-		teskListAdapter = new ArrayAdapter<String>(this,
-				android.R.layout.simple_list_item_1, list);
-
-		tasks.setAdapter(teskListAdapter);
+		//XXX: this is bad initialization of the adapter, must move it somewhere else
+		//@author:Kiril @date:09/02/11
+		AllTasks.getInstance().initAdapter(this);
+		tasks.setAdapter(AllTasks.getInstance().getTeskListAdapter());
 
 		tasks.setOnItemClickListener(new OnItemClickListener() {
 			@Override

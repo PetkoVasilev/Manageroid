@@ -28,4 +28,19 @@
 		name="active">Manageroid Active</string>
 	<string
 		name="inactive">Manageroid Inactive</string>
+	<string
+		name="modify_task">Modify this task</string>
+	<string
+		name="create_task">Create new task</string>
+
+	<string
+		name="exec_send_mail">Send email</string>
+	<string
+		name="exec_send_sms">Send SMS</string>
+	<string
+		name="exec_airplane_mode">Set Airplane Mode</string>
+	<string
+		name="exec_ringer_mode">Set Ringer Mode</string>
+	<string
+		name="save_task">Save task</string>
 </resources>
