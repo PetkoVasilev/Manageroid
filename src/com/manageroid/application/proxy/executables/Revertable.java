@@ -5,7 +5,7 @@ package com.manageroid.application.proxy.executables;
  * @author Administrator
  *
  */
-public interface Revertable {
+public interface Revertable extends Executable{
 
 	/**
 	 * Purpose - to revert some changes made to something by corresponding

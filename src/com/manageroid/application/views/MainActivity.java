@@ -20,6 +20,7 @@ import com.manageroid.application.ManageroidApp;
 import com.manageroid.application.R;
 import com.manageroid.application.proxy.AllTasks;
 import com.manageroid.application.proxy.Database;
+import com.manageroid.application.services.DebugLog;
 import com.manageroid.application.services.ManageroidService;
 
 /**
@@ -148,9 +149,11 @@ public class MainActivity extends Activity {
 	 * @param view
 	 * 		The {@link Button} for setting active/inactive
 	 */
-	public void toggleActive(View view) {
-		AllTasks.getInstance().getAllMyTasks();
-		
+	public void toggleActive(View view)
+	{
+		DebugLog.write("toggle service");
+		AllTasks.getInstance();
+//		AllTasks.getAllMyTasks();
 		if (active.getText() == getString(R.string.active)) {
 			active.setText(R.string.inactive);
 
@@ -160,7 +163,9 @@ public class MainActivity extends Activity {
 			sharedPreferencesEditor.putBoolean("startService", false);
 			sharedPreferencesEditor.commit();
 
-			// STOP the fucking service
+			Intent serviceIntent = new Intent();
+			serviceIntent.setAction("com.manageroid.application.services.ManageroidService");
+			stopService(serviceIntent);
 		} else {
 			active.setText(R.string.active);
 
@@ -171,8 +176,8 @@ public class MainActivity extends Activity {
 			sharedPreferencesEditor.commit();
 
 			Intent serviceIntent = new Intent();
-			serviceIntent
-					.setAction("com.manageroid.application.services.ManageroidService");
+			serviceIntent.setAction("com.manageroid.application.services.ManageroidService");
+			startService(serviceIntent);
 		}
 	}
 

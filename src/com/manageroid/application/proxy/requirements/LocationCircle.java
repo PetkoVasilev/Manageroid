@@ -1,5 +1,7 @@
 package com.manageroid.application.proxy.requirements;
 
+import java.io.Serializable;
+
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -15,8 +17,12 @@ import com.manageroid.application.services.ManageroidService;
  * @author Administrator
  * @see Accomplishable
  */
-public class LocationCircle implements Accomplishable, Readable {
+public class LocationCircle implements Accomplishable, Readable, Serializable {
 
+	/**
+     * 
+     */
+    private static final long serialVersionUID = 8348795389L; //HULK SMASH!
 	private static final String longtigude = "x";
 	private static final String latitude = "y";
 	private static final String radiusStr = "radius";
@@ -62,5 +68,4 @@ public class LocationCircle implements Accomplishable, Readable {
 			// @author:Kiril @date:06/02/11
 		}
 	}
-
 }

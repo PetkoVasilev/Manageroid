@@ -1,6 +1,5 @@
 package com.manageroid.application.proxy;
 
-import java.io.ByteArrayInputStream;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -11,31 +10,32 @@ import java.util.Collections;
 import java.util.List;
 
 import android.content.Context;
-import android.database.Cursor;
-import android.database.sqlite.SQLiteDatabase;
 
 import com.manageroid.application.ManageroidApp;
+import com.manageroid.application.services.DebugLog;
 
 public class AllTasks {
 	
 	private final static String FILE_NAME = "manageroid_tasks.bin";
+
+	private static ArrayList<ManageroidTask> allMyTasks = new ArrayList<ManageroidTask>();
 	
-	public void archive(Context context)
+	private static AllTasks instance;
+
+	public static void archive(Context context)
 	{
-		// not tested
 		try
 		{
 			FileOutputStream fos = context.openFileOutput(FILE_NAME, 0);
 			ObjectOutputStream oos = new ObjectOutputStream(fos);
 			oos.writeObject(allMyTasks);
+			oos.flush();
 			fos.close();
 		}
-		catch (IOException fnfe) {}
+		catch (IOException fnfe) {
+			DebugLog.write("in archive " + fnfe.toString());
+		}
 	}
-	
-	private static AllTasks instance;
-
-	private List<ManageroidTask> allMyTasks;
 
 	private AllTasks() {
 		load(ManageroidApp.getContext());
@@ -51,40 +51,78 @@ public class AllTasks {
 		setAllMyTasks(new ArrayList<ManageroidTask>());*/
 	}
 
-	public static AllTasks getInstance() {
+	public static AllTasks getInstance()
+	{
 		if (instance == null)
 			instance = new AllTasks();
 		return instance;
 	}
 
 	public void setAllMyTasks(ArrayList<ManageroidTask> value) {
-		this.allMyTasks = value;
+		allMyTasks = value;
 	}
 
-	public List<ManageroidTask> getAllMyTasks() {
+	public static List<ManageroidTask> getAllMyTasks() {
 		return Collections.unmodifiableList(allMyTasks);
 	}
 
-	public void load(Context context)
+	public static void load(Context context)
 	{
+		DebugLog.write("in AllTasks.load() start");
 		try
 		{
 			allMyTasks = null;
-			allMyTasks = new ArrayList<ManageroidTask>();
-			FileInputStream fos = context.openFileInput(FILE_NAME);
-			byte[] readBytes = new byte[1024*1024];  // 1MB should be enough for everybody...
-			fos.read(readBytes);
-			fos.close();
-
-			ObjectInputStream ois = new ObjectInputStream(new ByteArrayInputStream(readBytes));
+			FileInputStream fis = context.openFileInput(FILE_NAME);
+			ObjectInputStream ois = new ObjectInputStream(fis);
 			try
 			{
 				allMyTasks = (ArrayList<ManageroidTask>) ois.readObject();
-				ois.close();
 			}
-			catch (ClassNotFoundException cnfe) {}
+			catch (ClassNotFoundException cnfe) {
+				DebugLog.write("allMyTasks null pointer on read");
+			}
+			ois.close();
+			fis.close();
 		}
-		catch (IOException ioe) {}
+		catch (IOException ioe) {
+			DebugLog.write("in AllTasks.load() " + ioe.toString());
+		}
+
+		if (allMyTasks == null)
+			allMyTasks = new ArrayList<ManageroidTask>();
+	}
+	
+	public static void add(ManageroidTask newTask)
+	{
+		allMyTasks.add(newTask);
+	}
+	
+	public static void remove(int i)
+	{
+		DebugLog.write("remove " + i);
+		allMyTasks.remove(i);
+	}
+
+	public static void set(int i,  ManageroidTask newTask)
+	{
+		allMyTasks.set(i, newTask);
+	}
+	
+	public static boolean isEmpty()
+	{
+		return allMyTasks == null;
+	}
+	
+	public static int size()
+	{
+		if (allMyTasks != null)
+		{
+			return allMyTasks.size();
+		}
+		else
+		{
+			return 0;
+		}
 	}
 }
 
