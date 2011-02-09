@@ -11,8 +11,6 @@ import java.util.Collections;
 import java.util.List;
 
 import android.content.Context;
-import android.database.Cursor;
-import android.database.sqlite.SQLiteDatabase;
 
 import com.manageroid.application.ManageroidApp;
 
