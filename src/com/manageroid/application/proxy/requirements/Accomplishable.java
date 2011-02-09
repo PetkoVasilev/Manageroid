@@ -1,7 +1,5 @@
 package com.manageroid.application.proxy.requirements;
 
-import org.json.JSONObject;
-
 /**
  * Marks given class can accomplish its requirements
  * 

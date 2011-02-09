@@ -22,14 +22,12 @@ public class StartupReceiver extends BroadcastReceiver {
 
 		// I suppose that there is some bugs here
 
-		SharedPreferences prefs = PreferenceManager
-				.getDefaultSharedPreferences(ManageroidApp.getContext());
+		SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(ManageroidApp.getContext());
 		boolean bStartService = prefs.getBoolean("startService", false);
 
 		if (bStartService) {
 			Intent serviceIntent = new Intent();
-			serviceIntent
-					.setAction("com.manageroid.application.services.ManageroidService");
+			serviceIntent.setAction("com.manageroid.application.services.ManageroidService");
 			context.startService(serviceIntent);
 		}
 	}

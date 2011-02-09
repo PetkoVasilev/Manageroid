@@ -11,9 +11,9 @@ import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
 import android.os.IBinder;
-import android.text.format.Time;
-import android.widget.Toast;
 
+import java.util.Date;
+import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -22,18 +22,17 @@ import com.manageroid.application.proxy.ManageroidTask;
 
 /**
  * This is the main worker class of the application.
- * 
  * @author Administrator
- * 
+ *
  */
 public class ManageroidService extends Service {
-	// private final static long UPDATE_INTERVAL = 60 * 5 * 1000; // 5 minutes
+//	private final static long UPDATE_INTERVAL = 60 * 5 * 1000; // 5 minutes
 	private final static long UPDATE_INTERVAL = 10 * 1000; // seconds
 	private final static long DELAY_INTERVAL = 0;
 
 	private Timer timer = new Timer();
 
-	public static Time currentTime = null;
+	public static Date currentTime = null;
 	public static Location currentLocation = null;
 
 	@Override
@@ -53,7 +52,6 @@ public class ManageroidService extends Service {
 	public void onStart(Intent intent, int startId) {
 		// TODO Auto-generated method stub
 		super.onStart(intent, startId);
-		Toast.makeText(getApplicationContext(), "service manager started", Toast.LENGTH_SHORT).show();
 		_startService();
 	}
 
@@ -63,47 +61,85 @@ public class ManageroidService extends Service {
 	private void _startService() {
 		LocationManager mlocManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
 		final ManageroidGPSLocationListener mlocListener = new ManageroidGPSLocationListener();
-		mlocManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0,
-				mlocListener);
+		mlocManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, mlocListener);
+        
+        // read once on service start
+        AllTasks.load(getApplicationContext());
 
 		timer.scheduleAtFixedRate(new TimerTask() {
 			@Override
-			public void run() {
-				currentTime.setToNow();
-
+			public void run()
+			{
 				DebugLog.write("in timer");
+				boolean mustWriteTasks = false;
+				currentTime = new Date();
 				currentLocation = mlocListener.currentLocation;
 				if (currentLocation != null) {
 					double currentLat = currentLocation.getLongitude();
 					double currentLong = currentLocation.getLatitude();
 					DebugLog.write(currentLat + " " + currentLong);
 				}
+				
+				if (!AllTasks.isEmpty())
+				{
+					List<ManageroidTask> taskList = AllTasks.getAllMyTasks();
+					for (int i = taskList.size() - 1; i >= 0;--i)
+	    			{
+						ManageroidTask currentTask =  taskList.get(i);
+	    				if(currentTime.after(currentTask.expirationDate))
+	    				{
+							if (currentTask.isActive && currentTask.isRevertable())
+							{
+								currentTask.revert();
+							}
+							AllTasks.remove(i);
+							mustWriteTasks = true;
+	    					continue;
+	    				}
+	
+	    				if (currentTask.requirementsAreMet() && !currentTask.isActive)
+	    				{
+	    					currentTask.exec();
+	    					currentTask.isActive = true;
+	        				--currentTask.repeat;
+	
+	        				if(currentTask.repeat < 0 && !currentTask.isRevertable())
+	    					{
+	    						AllTasks.remove(i);
+	    					}
+	    					else
+	    					{
+	    						AllTasks.set(i, currentTask);
+	    					}
+	        				mustWriteTasks = true;
+	    				}
+	    				else if (!currentTask.requirementsAreMet() && currentTask.isActive)
+	    				{
+	    					if (currentTask.isRevertable())
+	    					{
+	    						currentTask.revert();
+	    					}
+	    					currentTask.isActive = false;
 
-				for (ManageroidTask rule : AllTasks.getInstance().getAllMyTasks()) {
-					if (currentTime.after(rule.expirationDate)) {
-						if (rule.isActive && rule.isRevertable()) {
-							rule.whatToRevert.undo();
-						}
-						// delete rule
-						continue;
-					}
+	        				if(currentTask.repeat < 0)
+	    					{
+	    						AllTasks.remove(i);
+	    					}
+	    					else
+	    					{
+	    						AllTasks.set(i, currentTask);
+	    					}
 
-					// if !hasLocationComponent, then
-					// "locationRuleSatisfied = true"
-
-					if (rule.requirementsAreMet() && !rule.isActive) {
-						rule.whatToDo.exec();
-						rule.isActive = true;
-						--rule.repeat;
-						if (rule.repeat < 0) {
-							// delete rule
-						}
-					} else if (!rule.requirementsAreMet() && rule.isActive) {
-						if (rule.isRevertable()) {
-							rule.whatToRevert.undo();
-						}
-						rule.isActive = false;
-					}
+	        				mustWriteTasks = true;
+	    				}
+	    			}
+				}
+				
+		        // write if anything has changed
+				if (mustWriteTasks)
+				{
+					DebugLog.write("archive " + AllTasks.size());
+					AllTasks.archive(getApplicationContext());
 				}
 			}
 		}, DELAY_INTERVAL, UPDATE_INTERVAL);
@@ -111,10 +147,8 @@ public class ManageroidService extends Service {
 
 	@Override
 	public void onDestroy() {
-		// TODO Auto-generated method stub
 		super.onDestroy();
-		_shutdownService();
-		Toast.makeText(getApplicationContext(), "service manager destroyed", Toast.LENGTH_SHORT).show();
+	    _shutdownService();
 	}
 
 	/*

@@ -3,10 +3,11 @@
  */
 package com.manageroid.application.proxy.requirements;
 
+import java.io.Serializable;
+import java.util.Date;
+
 import org.json.JSONException;
 import org.json.JSONObject;
-
-import android.text.format.Time;
 
 import com.manageroid.application.proxy.ManageroidTask;
 import com.manageroid.application.proxy.executables.Readable;
@@ -18,12 +19,16 @@ import com.manageroid.application.services.ManageroidService;
  *
  * @see Accomplishable
  */
-public class TimeInterval implements Accomplishable, Readable {
+public class TimeInterval implements Accomplishable, Readable, Serializable {
+	/**
+     * 
+     */
+    private static final long serialVersionUID = 9237641923746L; //random keyboard pounding
 	private static final String startStr = "start";
 	private static final String endStr = "start";
 
-	public Time start;
-	public Time end;
+	public Date start;
+	public Date end;
 
 	@Override
 	public boolean requirementsAreMet()
@@ -59,8 +64,8 @@ public class TimeInterval implements Accomplishable, Readable {
 	@Override
 	public void reconstructObject(JSONObject json) {
 		try {
-			start = (Time) json.get(startStr);
-			end = (Time) json.get(endStr);
+			start = (Date) json.get(startStr);
+			end = (Date) json.get(endStr);
 		} catch (JSONException e) {
 			//TODO:Logger something
 			//@author:Kiril @date:06/02/11
