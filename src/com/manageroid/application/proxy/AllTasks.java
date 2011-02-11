@@ -31,8 +31,6 @@ public class AllTasks {
 	
 	private BaseAdapter teskListAdapter;
 	
-	private Context context;
-
 	public void archive(Context context)
 	{
 		try

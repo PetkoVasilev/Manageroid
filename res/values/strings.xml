@@ -43,4 +43,9 @@
 		name="exec_ringer_mode">Set Ringer Mode</string>
 	<string
 		name="save_task">Save task</string>
+	<string
+		name="ok">OK</string>
+	<string
+		name="sms_content">What to be the content of the SMS?</string>
+
 </resources>

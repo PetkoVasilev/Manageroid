@@ -35,7 +35,8 @@
 		<RadioButton
 			android:checked="false"
 			android:id="@+id/option2"
-			android:text="@string/exec_send_sms" />
+			android:text="@string/exec_send_sms"
+			android:onClick="sendFuckingSMS" />
 		<RadioButton
 			android:checked="false"
 			android:id="@+id/option3"

@@ -101,7 +101,7 @@ public class MainActivity extends Activity {
 	protected void onPause() {
 		// TODO Auto-generated method stub
 		super.onPause();
-		Toast.makeText(this, "onPause", Toast.LENGTH_SHORT).show();
+		//Toast.makeText(this, "onPause", Toast.LENGTH_SHORT).show();
 	}
 
 	@Override
@@ -109,7 +109,7 @@ public class MainActivity extends Activity {
 		// TODO Auto-generated method stub
 		super.onStop();
 		// save, save
-		Toast.makeText(this, "onStop", Toast.LENGTH_SHORT).show();
+		//Toast.makeText(this, "onStop", Toast.LENGTH_SHORT).show();
 	}
 
 	/**

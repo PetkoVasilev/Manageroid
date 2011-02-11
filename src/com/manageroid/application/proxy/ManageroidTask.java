@@ -28,6 +28,8 @@ public class ManageroidTask implements Serializable {
 	public int repeat = 0;
 	
 	public Date expirationDate = null;
+	
+	public String description;
 
 	public void exec()
 	{
@@ -98,5 +100,7 @@ public class ManageroidTask implements Serializable {
 			// default far in the future
 			expirationDate = new Date(2032, 12, 31);
 		}
+		
+		description = "created new task, a";
 	}
 }
