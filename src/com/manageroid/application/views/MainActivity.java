@@ -63,7 +63,7 @@ public class MainActivity extends Activity {
 
 		setContentView(R.layout.main);
 
-		SQLiteDatabase db = Database.getInstance().databaseSerializer
+		SQLiteDatabase db = Database.getInstance().getDatabaseSerializer()
 				.getWritableDatabase();
 		db.close();
 

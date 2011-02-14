@@ -65,12 +65,24 @@ public class ManageroidTask implements Serializable {
 				&& (hasTimeComponent() && timeRule.requirementsAreMet() || !hasTimeComponent());
 	}
 	
+	/**
+	 * Creates empty task
+	 */
 	public ManageroidTask()
 	{
 		// a task without "action" is not valid, use only for testing
 		expirationDate = new Date(2032, 12, 31);
 	}
 	
+	/**
+	 * Creates new task
+	 * @param newTimeRule
+	 * @param newLocationRule
+	 * @param newAction
+	 * @param newIsActive
+	 * @param newRepeat
+	 * @param newExpirationDate
+	 */
 	public ManageroidTask(TimeInterval newTimeRule, LocationCircle newLocationRule, Executable newAction, boolean newIsActive, int newRepeat, Date newExpirationDate)
 	{
 		if (newTimeRule != null)

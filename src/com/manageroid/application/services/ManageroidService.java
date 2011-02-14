@@ -64,7 +64,8 @@ public class ManageroidService extends Service {
 		// TODO Auto-generated method stub
 		super.onCreate();
 		DebugLog.write("service onCreate");
-		tasks = AllTasks.getInstance();
+		
+		setTasks( AllTasks.getInstance());
 	}
 
 	@Override
@@ -83,7 +84,7 @@ public class ManageroidService extends Service {
 		mlocManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, mlocListener);
         
         // read once on service start
-		tasks.load(getApplicationContext());
+		tasks.load();
 
 		timer.scheduleAtFixedRate(new TimerTask() {
 			@Override
@@ -99,9 +100,9 @@ public class ManageroidService extends Service {
 					DebugLog.write(currentLat + " " + currentLong);
 				}
 				
-				if (!tasks.isEmpty())
+				if (!getTasks().isEmpty())
 				{
-					List<ManageroidTask> taskList = tasks.getAllMyTasks();
+					List<ManageroidTask> taskList = getTasks().getAllMyTasks();
 					for (int i = taskList.size() - 1; i >= 0;--i)
 	    			{
 						ManageroidTask currentTask =  taskList.get(i);
@@ -158,7 +159,7 @@ public class ManageroidService extends Service {
 				if (mustWriteTasks)
 				{
 					DebugLog.write("archive " + tasks.size());
-					tasks.archive(getApplicationContext());
+					tasks.archive();
 				}
 			}
 		}, DELAY_INTERVAL, UPDATE_INTERVAL);
@@ -167,18 +168,20 @@ public class ManageroidService extends Service {
 	@Override
 	public void onDestroy() {
 		super.onDestroy();
-	    _shutdownService();
+	    shutdownService();
 	}
 
 	/*
-	 * shutting down the service
+	 * Shutting down the service
 	 */
-	private void _shutdownService() {
+	private void shutdownService() {
 		if (timer != null)
 			timer.cancel();
 	}
 
-	/* Class Manageroid GPS Location Listener */
+	/** 
+	 * Class Manageroid GPS Location Listener 
+	 **/
 	public class ManageroidGPSLocationListener implements LocationListener {
 		public Location currentLocation = null;
 
@@ -189,15 +192,21 @@ public class ManageroidService extends Service {
 
 		@Override
 		public void onProviderDisabled(String provider) {
+			// TODO Auto-generated method stub
+			
 		}
 
 		@Override
 		public void onProviderEnabled(String provider) {
+			// TODO Auto-generated method stub
+			
 		}
 
 		@Override
 		public void onStatusChanged(String provider, int status, Bundle extras) {
+			// TODO Auto-generated method stub
+			
 		}
 
-	}/* End of Class Manageroid GPS Location Listener */
+	}
 }
